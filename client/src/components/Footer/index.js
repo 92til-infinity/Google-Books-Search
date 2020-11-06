@@ -5,7 +5,7 @@ function Footer() {
         <footer>
             <hr />
             <p className="pull-right">
-                <i className="fab fa-github" /> built using React.js
+                <i className="fab fa-github" /> REACT.JS
       </p>
         </footer>
     );

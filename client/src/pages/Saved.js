@@ -44,7 +44,7 @@ class Saved extends Component {
         </Row>
         <Row>
           <Col size="md-12">
-            <Card title="Saved" icon="download">
+            <BookCard title="Saved" icon="download">
               {this.state.books.length ? (
                 <List>
                   {this.state.books.map(book => (
@@ -59,14 +59,15 @@ class Saved extends Component {
               ) : (
                   <h2 className="text-center">Saved Books will go here</h2>
                 )}
-            </Card>
+            </BookCard>
           </Col>
         </Row>
         <Row>
           <Col size="md-2">
-            <Link to="/">← Back to home</Link>
+            <button to="/">← Back to home</button>
           </Col>
         </Row>
+        <Footer />
       </Container>
     )
   }

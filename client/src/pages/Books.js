@@ -1,86 +1,90 @@
-import React, { useState, useEffect } from "react";
-import DeleteBtn from "../components/DeleteBtn";
+import React, { Component } from "react";
+// import DeleteBtn from "../components/DeleteBtn";
 import Jumbotron from "../components/Jumbotron";
+import Form from "../components/Form";
+import BookCard from "../components/BookCard";
+import Footer from "../components/Footer";
+import Book from "../components/Book"
 import API from "../utils/API";
-import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
-import { List, ListItem } from "../components/List";
-import { Input, TextArea, FormBtn } from "../components/Form";
+import { List } from "../components/List";
 
-function Books() {
-  const [books, setBooks] = useState([])
-  const [formObject, setFormObject] = useState({})
-
-  useEffect(() => {
-    loadBooks()
-  }, [])
-
-  function loadBooks() {
-    API.getBooks()
-      .then(res =>
-        setBooks(res.data)
-      )
-      .catch(err => console.log(err));
+class Books extends Component {
+  state = {
+    books: [],
+    q: "",
+    message: "Search, Search, Search"
   };
 
-  function deleteBook(id) {
-    API.deleteBook(id)
-      .then(res => loadBooks())
-      .catch(err => console.log(err));
-  }
-
-  function handleInputChange(event) {
+  handleInputChange = event => {
     const { name, value } = event.target;
-    setFormObject({ ...formObject, [name]: value })
+    this.setState({
+      [name]: value
+    });
   };
 
-  function handleFormSubmit(event) {
+  getBooks = () => {
+    API.getBooks(this.state.q)
+      .then(res =>
+        this.setState({ books: res.data })
+      )
+      .catch(() =>
+        this.setState({ books: [], message: "nothing to show here" })
+      );
+  };
+
+  handleFormSubmit = event => {
     event.preventDefault();
-    if (formObject.title && formObject.author) {
-      API.saveBook({
-        title: formObject.title,
-        author: formObject.author,
-        synopsis: formObject.synopsis
-      })
-        .then(res => loadBooks())
-        .catch(err => console.log(err));
-    }
+    this.getBooks();
   };
 
-  return (
-    <Container fluid>
-      <Row>
-        <Col size="md-6">
-          <Jumbotron>
-            <h1>What Books Should I Read?</h1>
-          </Jumbotron>
-          <form>
-            <Input
-              onChange={handleInputChange}
-              name="title"
-              placeholder="Title (required)"
-            />
-            <Input
-              onChange={handleInputChange}
-              name="author"
-              placeholder="Author (required)"
-            />
-            <TextArea
-              onChange={handleInputChange}
-              name="synopsis"
-              placeholder="Synopsis (Optional)"
-            />
-            <FormBtn
-              disabled={!(formObject.author && formObject.title)}
-              onClick={handleFormSubmit}
-            >
-              Submit Book
-              </FormBtn>
-          </form>
-        </Col>
-      </Row>
-    </Container>
-  );
+  handleBookSave = id => {
+    const book = this.state.books.find(book => book.id === id);
+    API.saveBook({
+      title: book.volumeInfo.title,
+      subtitle: book.volumeInfo.subtitle,
+      author: book.volumeInfo.authors,
+      link: book.volumeInfo.infoLink,
+      description: book.volumeInfo.description,
+      image: book.volumeInfo.imageLinks.thumbnail,
+      googleId: book.id
+    })
+      .then(() => this.getBooks());
+
+  }
+  render() {
+
+    return (
+      <Container fluid>
+        <Row>
+          <Col size="md-6">
+            <Jumbotron>
+              <h1>What Books Should I Read?</h1>
+            </Jumbotron>
+          </Col>
+          <Col size="md-12">
+            <BookCard title="book-search" icon="far fa-book">
+              <Form handleInputChange={this.handleinputChange} handleFormSubmit={this.handleFormSubmit} q={this.state.q} />
+            </BookCard>
+          </Col>
+        </Row>
+        <Row>
+          <Col size="md-12">
+            <BookCard title="results">
+              {this.state.books.length ? (
+                <List>
+                  {this.state.books.map(book => (
+                    <Book key={book.id} title={book.volumeInfo.title} subtitle={book.VolumeInfo.subtitle} link={book.volumeInfo.infoLink} authors={book.volumeInfo.authors} description={book.volumeInfo.description} image={book.volumeInfo.imageLinks.thumbnail} Button={() => (<button onclick={() => this.handleBookSave(book.id)} className="btn btn-primary ml-2"> Put in Saved</button>)} />
+                  ))}
+                </List>
+              ) : (<h2 className="text-center">{this.state.message}</h2>)}
+            </BookCard>
+          </Col>
+        </Row>
+        <Footer />
+      </Container>
+    );
+  }
 }
 
 

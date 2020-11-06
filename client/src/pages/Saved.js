@@ -1,46 +1,75 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { Component } from "react";
 import { Col, Row, Container } from "../components/Grid";
+import { List } from "../components/List";
+import BookCard from "../components/BookCard";
+import Book from "../components/Book";
+import Footer from "../components/Footer";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 
-function Saved() {
-  const [book, setBook] = useState({})
+class Saved extends Component {
+  state = {
+    books: []
+  };
 
-  useEffect(() => {
-    API.getBook(/* book id should be passed here */)
-      .then(res => setBook(res.data))
+  componentDidMount() {
+    this.getSavedBooks();
+  }
+
+  getSavedBooks = () => {
+    API.getSavedBooks()
+      .then(res => this.setState({
+        books: res.data
+      }))
       .catch(err => console.log(err));
-  }, [])
+  };
 
-  return (
-    <Container fluid>
-      <Row>
-        <Col size="md-12">
-          <Jumbotron>
-            <h1>
-              {book.title} by {book.author}
-            </h1>
-          </Jumbotron>
-        </Col>
-      </Row>
-      <Row>
-        <Col size="md-10 md-offset-1">
-          <article>
-            <h1>Synopsis</h1>
-            <p>
-              {book.synopsis}
-            </p>
-          </article>
-        </Col>
-      </Row>
-      <Row>
-        <Col size="md-2">
-          <Link to="/">← Back to Authors</Link>
-        </Col>
-      </Row>
-    </Container>
-  );
+  handleBookDelete = id => {
+    API.deleteBook(id).then(res => this.getSavedBooks());
+  }
+
+
+
+  render() {
+    return (
+      <Container fluid>
+        <Row>
+          <Col size="md-12">
+            <Jumbotron>
+              <h1 className="text-center">
+                Here are your saved books
+              </h1>
+            </Jumbotron>
+          </Col>
+        </Row>
+        <Row>
+          <Col size="md-12">
+            <Card title="Saved" icon="download">
+              {this.state.books.length ? (
+                <List>
+                  {this.state.books.map(book => (
+                    <Book key={book._id} title={book.title} subtitle={book.subtitle} link={book.link} authors={book.authors.join(",")} description={book.description} image={book.image}
+                      Button={() => (
+                        <button onClick={() => this.handleBookDelete(book._id)}
+                          className="btn btn-danger ml-2">X</button>
+                      )}
+                    />
+                  ))}
+                </List>
+              ) : (
+                  <h2 className="text-center">Saved Books will go here</h2>
+                )}
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col size="md-2">
+            <Link to="/">← Back to home</Link>
+          </Col>
+        </Row>
+      </Container>
+    )
+  }
 }
 
 

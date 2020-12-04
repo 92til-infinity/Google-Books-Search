@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // import DeleteBtn from "../components/DeleteBtn";
 import Jumbotron from "../components/Jumbotron";
-import Form from "../components/Form";
+import InputForm from "../components/Form";
 import BookCard from "../components/BookCard";
 // import Footer from "../components/Footer";
 import Book from "../components/Book"
@@ -64,7 +64,7 @@ class Books extends Component {
           </Col>
           <Col size="md-12">
             <BookCard title="book-search" icon="far fa-book">
-              <Form
+              <InputForm
                 handleInputChange={this.handleInputChange}
                 handleFormSubmit={this.handleFormSubmit}
                 q={this.state.q}

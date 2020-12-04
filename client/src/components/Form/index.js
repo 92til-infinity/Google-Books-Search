@@ -1,6 +1,6 @@
 import React from "react";
 
-function Form({ q, handleInputChange, handleFormSubmit }) {
+function InputForm({ q, handleInputChange, handleFormSubmit }) {
   return (
     <form>
       <div className="form-group">
@@ -26,4 +26,4 @@ function Form({ q, handleInputChange, handleFormSubmit }) {
 
   );
 }
-export default Form;
+export default InputForm;

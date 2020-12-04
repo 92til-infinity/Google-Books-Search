@@ -1,8 +1,9 @@
 import React from "react";
+import "./style.css";
 
 function Footer() {
     return (
-        <footer>
+        <footer className="footer">
             <hr />
             <p className="pull-right">
                 <i className="fab fa-github" /> REACT.JS

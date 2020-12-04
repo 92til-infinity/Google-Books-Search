@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import Jumbotron from "../components/Jumbotron";
 import Form from "../components/Form";
 import BookCard from "../components/BookCard";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 import Book from "../components/Book"
 import API from "../utils/API";
 import { Col, Row, Container } from "../components/Grid";
@@ -57,14 +57,18 @@ class Books extends Component {
     return (
       <Container fluid>
         <Row>
-          <Col size="md-6">
+          <Col size="md-12">
             <Jumbotron>
               <h1>What Books Should I Read?</h1>
             </Jumbotron>
           </Col>
           <Col size="md-12">
             <BookCard title="book-search" icon="far fa-book">
-              <Form handleInputChange={this.handleinputChange} handleFormSubmit={this.handleFormSubmit} q={this.state.q} />
+              <Form
+                handleInputChange={this.handleInputChange}
+                handleFormSubmit={this.handleFormSubmit}
+                q={this.state.q}
+              />
             </BookCard>
           </Col>
         </Row>
@@ -81,7 +85,7 @@ class Books extends Component {
             </BookCard>
           </Col>
         </Row>
-        <Footer />
+        {/* <Footer /> */}
       </Container>
     );
   }

@@ -3,7 +3,7 @@ import { Col, Row, Container } from "../components/Grid";
 import { List } from "../components/List";
 import BookCard from "../components/BookCard";
 import Book from "../components/Book";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 
@@ -62,12 +62,13 @@ class Saved extends Component {
             </BookCard>
           </Col>
         </Row>
+        <br></br>
         <Row>
           <Col size="md-2">
             <button to="/">← Back to home</button>
           </Col>
         </Row>
-        <Footer />
+        {/* <Footer /> */}
       </Container>
     )
   }
